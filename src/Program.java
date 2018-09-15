@@ -1,15 +1,17 @@
-import java.lang.reflect.InvocationTargetException;
 import java.util.Scanner;
 
 public class Program {
-	public static void main(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
-	{
+	public static void main(String[] args) throws SecurityException, IllegalArgumentException {
 		ChatBot chatBot = new ChatBot();
 		Scanner sc = new Scanner(System.in);
+		System.out.println("Привет! Я поиграю с тобой в игру \"Угадай число\". Загадай какое-нибудь целое число и " +
+                "напиши команду \"старт\".\nОстановить игру можно командой \"стоп\". Команда \"о игре\" выведет " +
+                "правила на экран.");
+
 		while(true)
 		{
-			String request = sc.nextLine();	
-			chatBot.Answer(chatBot.answers.get(request));
+			String request = sc.nextLine();
+			System.out.println(chatBot.Answer(request));
 		}
 	}
 }
