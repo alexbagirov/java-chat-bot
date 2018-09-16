@@ -21,19 +21,23 @@ class ChatBot {
             	if (!gameActive) return gameNotActive;
 
 				gameActive = false;
-				return "\"Команда не распознана. Попробуй ещё раз.";
+				return "Команда не распознана. Попробуй ещё раз.";
             case "больше":
             case ">":
             case "меньше":
             case "<":
-            	if (!gameActive) return gameNotActive;
-
-				guessNumber = request.equals("больше") || request.equals(">") ?
-						currentGame.generateNewRequest(NumberIs.BIGGER) :
-						currentGame.generateNewRequest(NumberIs.SMALLER);
-				if (guessNumber != -1)
-					return String.format("Может, это %d?", guessNumber);
-				return "Ты меня обманываешь";
+	            if (!gameActive) return gameNotActive;
+	            String answer = "";
+	            try {
+					guessNumber = request.equals("больше") || request.equals(">") ?
+							currentGame.generateNewRequest(NumberIs.BIGGER) :
+							currentGame.generateNewRequest(NumberIs.SMALLER);
+					answer = String.format("Может, это %d?", guessNumber);
+            	}
+            	catch(BorderException e) {
+            		answer = "Ты меня обманываешь";
+            	}
+	            return answer;
             case "угадал":
             	if (!gameActive) return gameNotActive;
 
