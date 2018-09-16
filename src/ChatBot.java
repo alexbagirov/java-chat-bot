@@ -1,36 +1,47 @@
 enum NumberIs { BIGGER, SMALLER }
 
 class ChatBot {
+	boolean gameOn = false;
+	GameLogic currentGame = new GameLogic();
 	String Answer(String request) throws SecurityException, IllegalArgumentException {
 		switch (request) {
             case "старт":
-                return String.format("Игра началась.\nПервое число: %d?", GuessNumber());
-            case "о игре":
-                return "Когда ты загадаешь число и начнёшь игру, я буду предлагать разные варианты.\nЕсли твоё число" +
-                        "больше моего, ответь \"больше\", если меньше - \"меньше\". Если было названо верное число, " +
-                        "напиши \"угадал\".\nСтарт игры - команда \"старт\", остановка - \"стоп\".";
+            	currentGame = new GameLogic();
+            	int guessNumber;
+            	gameOn = true;
+                return String.format("Игра началась.\\nПервое число: %d?", currentGame.midle);
+            case "об игре":
+                return "Когда ты загадаешь число и начнёшь игру, я буду предлагать разные варианты.\\nЕсли твоё число" +
+                        "больше моего, ответь \\\"больше\\\", если меньше - \\\"меньше\\\". Если было названо верное число, " +
+                        "напиши \\\"угадал\\\".\\nСтарт игры - команда \\\"старт\\\", остановка - \\\"стоп\\\".";
             case "стоп":
-                return "Игра закончена. Для продолжения введи следующую команду.";
+            	if (gameOn) 
+            	{
+            		gameOn = false;
+            		return "\"Команда не распознана. Попробуй ещё раз.";
+            	}
             case "больше":
             case ">":
-                UpdateBorders(NumberIs.BIGGER);
-                return String.format("Может, это %d?", GuessNumber());
+            	if (gameOn)
+            	{
+            		guessNumber = currentGame.generateNewRequest(NumberIs.BIGGER);
+            		return String.format("Может, это %d?", guessNumber);
+            	}
             case "меньше":
             case "<":
-                UpdateBorders(NumberIs.SMALLER);
-                return String.format("Может, это %d?", GuessNumber());
+            	if (gameOn) 
+            	{
+            		guessNumber = currentGame.generateNewRequest(NumberIs.SMALLER);
+            		return String.format("Может, это %d?", guessNumber);
+            	}
             case "угадал":
-                return "Ура! Игра закончена. Для продолжения введи следующую команду.";
-			default:
-			    return "Команда не распознана. Попробуй ещё раз.";
+            	if (gameOn) 
+            	{
+            		gameOn = false;
+            		return "Ура! Игра закончена. Для продолжения введи следующую команду.";
+            	}
+            default:
+			    return "\"Команда не распознана. Попробуй ещё раз или воспользуйся помощью.";
 		}
 	}
-
-	private int GuessNumber() {
-	    throw new UnsupportedOperationException();
-    }
-
-    private void UpdateBorders(NumberIs answer) {
-	    throw new UnsupportedOperationException();
-    }
 }
