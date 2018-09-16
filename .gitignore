@@ -54,3 +54,5 @@ out/
 # Caches and binaries
 .settings/
 bin/
+src/.project
+src/.classpath

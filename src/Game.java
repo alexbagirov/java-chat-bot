@@ -17,6 +17,8 @@ class Game {
 			rightBorder = middle;
 		else
 			leftBorder = middle;
+		if (middle == (leftBorder + rightBorder) / 2)
+			return -1;	
 		middle = (leftBorder + rightBorder) / 2;
 		return middle;
 	}

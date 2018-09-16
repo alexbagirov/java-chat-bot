@@ -27,14 +27,18 @@ class ChatBot {
             	if (gameActive)
             	{
             		guessNumber = currentGame.generateNewRequest(NumberIs.BIGGER);
-            		return String.format("Может, это %d?", guessNumber);
+            		if (guessNumber != -1)
+            			return String.format("Может, это %d?", guessNumber);
+            		return "Ты меня обманываешь";
             	}
             case "меньше":
             case "<":
             	if (gameActive)
             	{
             		guessNumber = currentGame.generateNewRequest(NumberIs.SMALLER);
-            		return String.format("Может, это %d?", guessNumber);
+            		if (guessNumber != -1)
+            			return String.format("Может, это %d?", guessNumber);
+            		return "Ты меня обманываешь";
             	}
             case "угадал":
             	if (gameActive)
