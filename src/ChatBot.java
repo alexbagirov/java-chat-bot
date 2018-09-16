@@ -3,12 +3,13 @@ enum NumberIs { BIGGER, SMALLER }
 class ChatBot {
 	private boolean gameActive = false;
 	private Game currentGame = new Game();
+	private final String gameNotActive = "Игра ещё не началась.";
+	private int guessNumber;
 
 	String Answer(String request) throws SecurityException, IllegalArgumentException {
 		switch (request) {
             case "старт":
             	currentGame = new Game();
-            	int guessNumber;
             	gameActive = true;
                 return String.format("Игра началась.\nПервое число: %d?", currentGame.middle);
             case "об игре":
@@ -17,35 +18,27 @@ class ChatBot {
                         "напиши \"угадал\".\nСтарт игры - команда \"старт\", остановка - \"стоп\". " +
 						"Максимальное число в игре - 100";
             case "стоп":
-            	if (gameActive)
-            	{
-            		gameActive = false;
-            		return "\"Команда не распознана. Попробуй ещё раз.";
-            	}
+            	if (!gameActive) return gameNotActive;
+
+				gameActive = false;
+				return "\"Команда не распознана. Попробуй ещё раз.";
             case "больше":
             case ">":
-            	if (gameActive)
-            	{
-            		guessNumber = currentGame.generateNewRequest(NumberIs.BIGGER);
-            		if (guessNumber != -1)
-            			return String.format("Может, это %d?", guessNumber);
-            		return "Ты меня обманываешь";
-            	}
             case "меньше":
             case "<":
-            	if (gameActive)
-            	{
-            		guessNumber = currentGame.generateNewRequest(NumberIs.SMALLER);
-            		if (guessNumber != -1)
-            			return String.format("Может, это %d?", guessNumber);
-            		return "Ты меня обманываешь";
-            	}
+            	if (!gameActive) return gameNotActive;
+
+				guessNumber = request.equals("больше") || request.equals(">") ?
+						currentGame.generateNewRequest(NumberIs.BIGGER) :
+						currentGame.generateNewRequest(NumberIs.SMALLER);
+				if (guessNumber != -1)
+					return String.format("Может, это %d?", guessNumber);
+				return "Ты меня обманываешь";
             case "угадал":
-            	if (gameActive)
-            	{
-            		gameActive = false;
-            		return "Ура! Игра закончена. Для продолжения введи следующую команду.";
-            	}
+            	if (!gameActive) return gameNotActive;
+
+				gameActive = false;
+				return "Ура! Игра закончена. Для продолжения введи следующую команду.";
             default:
 			    return "Команда не распознана. Попробуй ещё раз или воспользуйся помощью.";
 		}
