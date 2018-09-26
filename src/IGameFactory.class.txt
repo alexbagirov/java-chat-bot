@@ -1,0 +1,2 @@
+﻿Кюєѕ   4 	  IGameFactory  java/lang/Object create 	()LIGame; 
+SourceFile IGameFactory.java                 

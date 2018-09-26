@@ -1,4 +1,3 @@
-import static com.sun.tools.internal.ws.wsdl.parser.Util.fail;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
@@ -31,6 +30,7 @@ class Tests
 					botAnswer = bot.Answer(">");
 				
 			} while(x != guessNumber);	
+			bot.Answer("стоп");
 		}
 	}	
 	
