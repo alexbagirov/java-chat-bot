@@ -7,7 +7,7 @@ class ChatBot {
         gameInstance = gameFactory.create();
     }
 
-    String Answer(String message) {
+    String answer(String message) {
         switch (message) {
             case "старт":
                 if (!gameInstance.isActive()) {
