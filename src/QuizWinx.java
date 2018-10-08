@@ -98,9 +98,6 @@ public class QuizWinx implements IGame {
 		Collections.shuffle(answers);
 		currentQuestionNumber++;
 		previousAnswers = answers;
-		return new ChatBotReply(
-		        quizSteps.get(currentQuestionNumber).question
-                        + "\n" + String.join("\n", getAnswers(answers)),
-                null);
+		return new ChatBotReply(quizSteps.get(currentQuestionNumber).question, getAnswers(answers));
 	}
 }
