@@ -17,13 +17,13 @@ class Tests
 		int[] testCases = {100, 99, 1, 0};
 		for (int x : testCases) 
 		{
-			String botAnswer = bot.answer("старт");
+			ChatBotReply botAnswer = bot.answer("старт");
 			int guessNumber;
 			do
 			{
-				if (botAnswer.charAt(0) != 'И' && botAnswer.charAt(0) != 'М')
+				if (botAnswer.message.charAt(0) != 'И' && botAnswer.message.charAt(0) != 'М')
 					fail("Expected guessing number");
-				guessNumber = extractNumber(botAnswer);
+				guessNumber = extractNumber(botAnswer.message);
 				if (guessNumber > x) 
 					botAnswer = bot.answer("<");
 				else
@@ -38,21 +38,21 @@ class Tests
 	void badNumber() 
 	{
 		ChatBot bot = new ChatBot(new GameFactory());
-		String botAnswer = bot.answer("старт");
+		ChatBotReply botAnswer = bot.answer("старт");
 		do
 		{
-			if (botAnswer.charAt(0) != 'И' && botAnswer.charAt(0) != 'М')
+			if (botAnswer.message.charAt(0) != 'И' && botAnswer.message.charAt(0) != 'М')
 				fail("Expected guessing number");
 			botAnswer = bot.answer("<");
-		} while(!botAnswer.equals("Ты меня обманываешь"));
+		} while(!botAnswer.message.equals("Ты меня обманываешь"));
 	}
 
 	@Test
 	void badCommand()
 	{
 		ChatBot bot = new ChatBot(new GameFactory());
-		String botAnswer = bot.answer("ла-ла-ла");
-		assertEquals("Команда не распознана. Попробуй ещё раз или воспользуйся помощью.", botAnswer);
+		ChatBotReply botAnswer = bot.answer("ла-ла-ла");
+		assertEquals("Команда не распознана. Попробуй ещё раз или воспользуйся помощью.", botAnswer.message);
 	}
 	
 }
