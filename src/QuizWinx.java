@@ -86,11 +86,11 @@ public class QuizWinx implements IGame {
 	}
 	
 	@Override
-	public String proceedRequest(String request) {
+	public ChatBotReply proceedRequest(String request) {
 		if (currentQuestionNumber > questionsCount)
 		{
 			markInactive();
-			return characterOrder[indexOf(answerStatistic, max(answerStatistic))];
+			return new ChatBotReply(characterOrder[indexOf(answerStatistic, max(answerStatistic))], null);
 		}
 		int answerIndex = request.charAt(0) - firstAnswer;
 		answerStatistic[previousAnswers.get(answerIndex).characterIndex]++;
@@ -98,6 +98,9 @@ public class QuizWinx implements IGame {
 		Collections.shuffle(answers);
 		currentQuestionNumber++;
 		previousAnswers = answers;
-		return quizSteps.get(currentQuestionNumber).question + "\n" + String.join("\n", getAnswers(answers));
+		return new ChatBotReply(
+		        quizSteps.get(currentQuestionNumber).question
+                        + "\n" + String.join("\n", getAnswers(answers)),
+                null);
 	}
 }

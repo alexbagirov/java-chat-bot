@@ -1,7 +1,7 @@
 public interface IGame {
     String getInitialMessage();
 
-    String proceedRequest(String request);
+    ChatBotReply proceedRequest(String request);
 
     void markActive();
     void markInactive();
