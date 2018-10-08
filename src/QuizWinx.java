@@ -5,13 +5,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-public class QuizWinx implements IGame{
+public class QuizWinx implements IGame {
 	private boolean gameActive = false;
 	private ArrayList<QuizItem> quizSteps; 
 	private int questionsCount;
 	public int currentQuestionNumber;
 	private int[] answerStatistic;
-	private final String[] characterOrder = new String[] {"Блум", "Стелла", "Муза", "Текна", "Флора", "Лейла"};
+	private final String[] characterOrder = new String[] {"пїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ", "пїЅпїЅпїЅпїЅпїЅ"};
 	private List<Answer> previousAnswers = new ArrayList<Answer>();
 	private final char firstAnswer = 'A';
 	

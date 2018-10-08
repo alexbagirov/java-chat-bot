@@ -1,8 +1,13 @@
+import java.io.FileNotFoundException;
+
 public class GameFactory implements IGameFactory {
     @Override
     public IGame create() {
-        final GuessNumberGame game = new GuessNumberGame();
-        System.out.println(game.getWelcomeMessage());
-        return game;
+        try {
+            return new QuizWinx("winx");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
