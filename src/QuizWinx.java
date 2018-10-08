@@ -9,10 +9,10 @@ public class QuizWinx implements IGame {
 	private boolean gameActive = false;
 	private ArrayList<QuizItem> quizSteps; 
 	private int questionsCount;
-	public int currentQuestionNumber;
+	private int currentQuestionNumber;
 	private int[] answerStatistic;
-	private final String[] characterOrder = new String[] {"����", "������", "����", "�����", "�����", "�����"};
-	private List<Answer> previousAnswers = new ArrayList<Answer>();
+	private final String[] characterOrder = new String[] {"Блум", "Стелла", "Муза", "Текна", "Флора", "Лейла"};
+	private List<Answer> previousAnswers = new ArrayList<>();
 	private final char firstAnswer = 'A';
 	
 	public QuizWinx(String fileName) throws FileNotFoundException
@@ -21,21 +21,20 @@ public class QuizWinx implements IGame {
 		File file = new File(fileName);
 		Scanner sc = new Scanner(file); 
 		this.questionsCount =  Integer.parseInt(sc.nextLine());
-		this.quizSteps = new ArrayList<QuizItem>();
+		this.quizSteps = new ArrayList<>();
 		answerStatistic = new int[questionsCount];
 		for (int i = 0; i < questionsCount; i++)
 			answerStatistic[i] = 0;
-	    parseFile(file, sc);
+	    parseFile(sc);
 	}
 	
-	private void parseFile(File file, Scanner sc) throws FileNotFoundException
-	{
+	private void parseFile(Scanner sc) {
 		int answerNumber = 0;
 		while (sc.hasNextLine()) 
 	    {
 	    	if (answerNumber == 0) {
 	    		String currentQuestion = sc.nextLine();
-	    		ArrayList<Answer> currentAnswers = new ArrayList<Answer>();
+	    		ArrayList<Answer> currentAnswers = new ArrayList<>();
 	    		for(int i = 0; i < questionsCount; ++i) 
 	    			currentAnswers.add(new Answer(sc.nextLine(), i));
 	    		this.quizSteps.add(new QuizItem(currentAnswers, currentQuestion)); 		
@@ -58,12 +57,7 @@ public class QuizWinx implements IGame {
         return gameActive;
     }
 
-	@Override
-	public String getWelcomeMessage() {
-		return "";
-	}
-
-	@Override
+    @Override
 	public String getInitialMessage() {
         gameActive = true;
 		return "";
@@ -71,8 +65,7 @@ public class QuizWinx implements IGame {
 		
 	private static int max(int[] array) {
         int maximum = array[0];
-        for (int i = 0; i < array.length; i++)
-            if (maximum < array[i]) maximum = array[i];
+        for (int anArray : array) if (maximum < anArray) maximum = anArray;
         return maximum;
     }
 	
@@ -86,7 +79,7 @@ public class QuizWinx implements IGame {
 
 	private List<String> getAnswers(List<Answer> answerItems)
 	{
-		List<String> answers = new ArrayList<String>();
+		List<String> answers = new ArrayList<>();
 		for (Answer answer: answerItems)
 			answers.add(answer.answer);
 		return answers;
@@ -101,7 +94,7 @@ public class QuizWinx implements IGame {
 		}
 		int answerIndex = request.charAt(0) - firstAnswer;
 		answerStatistic[previousAnswers.get(answerIndex).characterIndex]++;
-		List<Answer> answers = new ArrayList<Answer>(quizSteps.get(currentQuestionNumber).answers);
+		List<Answer> answers = new ArrayList<>(quizSteps.get(currentQuestionNumber).answers);
 		Collections.shuffle(answers);
 		currentQuestionNumber++;
 		previousAnswers = answers;

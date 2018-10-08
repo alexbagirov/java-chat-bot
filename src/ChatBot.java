@@ -9,14 +9,14 @@ class ChatBot {
 
     String answer(String message) {
         switch (message) {
-            case "старт":
+            case "/start":
                 if (!gameInstance.isActive()) {
                     gameInstance = gameFactory.create();
                     gameInstance.markActive();
                     return gameInstance.getInitialMessage();
                 }
                 return "Игра уже идёт.";
-            case "стоп":
+            case "/stop":
                 if (!gameInstance.isActive())
                     return "Игра ещё не началась.";
                 gameInstance.markInactive();
