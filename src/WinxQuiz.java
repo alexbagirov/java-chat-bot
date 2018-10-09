@@ -1,37 +1,42 @@
+import database.DatabaseWorker;
+import database.GameDataSet;
+
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class WinxQuiz implements IGame {
-	private boolean gameActive = false;
-	private ArrayList<QuizItem> quizSteps; 
+	private ArrayList<QuizItem> quizSteps;
 	private int answersCount;
 	private int currentQuestionNumber;
 	private List<Integer> answerStatistic;
 	private final String[] characterOrder;
 	private List<Integer> answersOrder;
 
+	private DatabaseWorker db = new DatabaseWorker();
+
     public WinxQuiz(String fileName) throws FileNotFoundException
 	{
-		currentQuestionNumber = 0;
+	    db.connect();
+	    db.initDatabase();
 		File file = new File(fileName);
 		Scanner sc = new Scanner(file); 
 		answersCount =  Integer.parseInt(sc.nextLine());
 		quizSteps = new ArrayList<>();
 		characterOrder = sc.nextLine().split(" ");
-		answerStatistic = new ArrayList<>();
-		for (int i = 0; i < answersCount; i++)
-			answerStatistic.add(0);
 	    parseFile(sc);
-
-	    answersOrder = new ArrayList<>();
-	    for (int i = 0; i < answersCount; ++i) {
-	        answersOrder.add(i);
-        }
 	}
+
+	private void getGameData(int userId) {
+        GameDataSet userData = db.getGameData(userId);
+        currentQuestionNumber = userData.currentQuestionId;
+        answerStatistic = new ArrayList<>();
+        for (int i = 0; i < userData.answerStatistics.length; ++i)
+            answerStatistic.add(userData.answerStatistics[i]);
+        answersOrder = new ArrayList<>();
+        for (int i = 0; i < userData.answersOrder.length; ++i)
+            answersOrder.add(userData.answersOrder[i]);
+    }
 	
 	private void parseFile(Scanner sc) {
 		while (sc.hasNextLine())
@@ -45,23 +50,23 @@ public class WinxQuiz implements IGame {
 	}
 	
     @Override
-    public void markActive() {
-        gameActive = true;
+    public void markActive(int userId) {
+        db.markGameActive(userId);
     }
 
     @Override
-    public void markInactive() {
-        gameActive = false;
+    public void markInactive(int userId) {
+        db.markGameInactive(userId);
     }
 
     @Override
-    public boolean isActive() {
-        return gameActive;
+    public boolean isActive(int userId) {
+        return db.isGameActive(userId);
     }
 
     @Override
-	public String getInitialMessage() {
-        gameActive = true;
+	public String getInitialMessage(int userId) {
+        markActive(userId);
 		return "Привет! Сейчас мы узнаем, кто ты из фей Winx.";
 	}
 
@@ -79,10 +84,17 @@ public class WinxQuiz implements IGame {
 	}
 	
 	@Override
-	public ChatBotReply proceedRequest(String request) {
+	public ChatBotReply proceedRequest(String request, int userId) {
+        if (currentQuestionNumber == 0) {
+            db.destroyGameData(userId);
+            db.createGameData(userId);
+        }
+
+        getGameData(userId);
+
 		if (currentQuestionNumber > answersCount)
 		{
-			markInactive();
+			markInactive(userId);
 			return new ChatBotReply(characterOrder[answerStatistic.indexOf(Collections.max(answerStatistic))],
                     null);
 		}
@@ -97,6 +109,8 @@ public class WinxQuiz implements IGame {
 
         currentQuestionNumber++;
 		Collections.shuffle(answersOrder);
+
+		db.setGameData(userId, new GameDataSet(userId, currentQuestionNumber, answerStatistic, answersOrder));
 		return new ChatBotReply(quizSteps.get(currentQuestionNumber - 1).question, getAnswers(answersOrder));
 	}
 }

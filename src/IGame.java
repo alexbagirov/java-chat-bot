@@ -1,10 +1,10 @@
 public interface IGame {
-    String getInitialMessage();
+    String getInitialMessage(int userId);
 
-    ChatBotReply proceedRequest(String request);
+    ChatBotReply proceedRequest(String request, int userId);
 
-    void markActive();
-    void markInactive();
+    void markActive(int userId);
+    void markInactive(int userId);
 
-    boolean isActive();
+    boolean isActive(int userId);
 }

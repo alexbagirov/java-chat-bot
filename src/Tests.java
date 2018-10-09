@@ -17,7 +17,7 @@ class Tests
 		int[] testCases = {100, 99, 1, 0};
 		for (int x : testCases) 
 		{
-			ChatBotReply botAnswer = bot.answer("старт");
+			ChatBotReply botAnswer = bot.answer("старт", 1);
 			int guessNumber;
 			do
 			{
@@ -25,12 +25,12 @@ class Tests
 					fail("Expected guessing number");
 				guessNumber = extractNumber(botAnswer.message);
 				if (guessNumber > x) 
-					botAnswer = bot.answer("<");
+					botAnswer = bot.answer("<", 1);
 				else
-					botAnswer = bot.answer(">");
+					botAnswer = bot.answer(">", 1);
 				
 			} while(x != guessNumber);	
-			bot.answer("стоп");
+			bot.answer("стоп", 1);
 		}
 	}	
 	
@@ -38,12 +38,12 @@ class Tests
 	void badNumber() 
 	{
 		ChatBot bot = new ChatBot(new GameFactory());
-		ChatBotReply botAnswer = bot.answer("старт");
+		ChatBotReply botAnswer = bot.answer("старт", 1);
 		do
 		{
 			if (botAnswer.message.charAt(0) != 'И' && botAnswer.message.charAt(0) != 'М')
 				fail("Expected guessing number");
-			botAnswer = bot.answer("<");
+			botAnswer = bot.answer("<", 1);
 		} while(!botAnswer.message.equals("Ты меня обманываешь"));
 	}
 
@@ -51,7 +51,7 @@ class Tests
 	void badCommand()
 	{
 		ChatBot bot = new ChatBot(new GameFactory());
-		ChatBotReply botAnswer = bot.answer("ла-ла-ла");
+		ChatBotReply botAnswer = bot.answer("ла-ла-ла", 1);
 		assertEquals("Команда не распознана. Попробуй ещё раз или воспользуйся помощью.", botAnswer.message);
 	}
 	

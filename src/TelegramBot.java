@@ -12,13 +12,22 @@ import java.util.List;
 
 public class TelegramBot extends TelegramLongPollingBot {
     private static ChatBot chatBot = new ChatBot(new GameFactory());
-    private static String BOT_USERNAME = System.getenv("BOT_USERNAME");
-    private static String BOT_TOKEN = System.getenv("BOT_TOKEN");
+
+    private static String BOT_USERNAME;
+    private static String BOT_TOKEN;
 
     private final ReplyKeyboardRemove noKeyboard = new ReplyKeyboardRemove();
 
     protected TelegramBot(DefaultBotOptions botOptions) {
         super(botOptions);
+        try {
+            BOT_USERNAME = System.getenv("BOT_USERNAME");
+            BOT_TOKEN = System.getenv("BOT_TOKEN");
+        }
+        catch (NumberFormatException e) {
+            System.out.println("Please set bot credentials!");
+            System.exit(0);
+        }
     }
 
     @Override
@@ -34,7 +43,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         try {
-            ChatBotReply reply = chatBot.answer(update.getMessage().getText());
+            ChatBotReply reply = chatBot.answer(update.getMessage().getText(),
+                    update.getMessage().getFrom().getId());
 
             var sendMessage = new SendMessage(
                     update.getMessage().getChatId(),
