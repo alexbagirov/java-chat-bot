@@ -11,7 +11,7 @@ public class WinxQuiz implements IGame {
 	private int answersCount;
 	private int currentQuestionNumber;
 	private List<Integer> answerStatistic;
-	private final String[] characterOrder = new String[] {"Блум", "Стелла", "Муза", "Текна", "Флора", "Лейла"};
+	private final String[] characterOrder;
 	private List<Integer> answersOrder;
 
     public WinxQuiz(String fileName) throws FileNotFoundException
@@ -21,6 +21,7 @@ public class WinxQuiz implements IGame {
 		Scanner sc = new Scanner(file); 
 		answersCount =  Integer.parseInt(sc.nextLine());
 		quizSteps = new ArrayList<>();
+		characterOrder = sc.nextLine().split(" ");
 		answerStatistic = new ArrayList<>();
 		for (int i = 0; i < answersCount; i++)
 			answerStatistic.add(0);
