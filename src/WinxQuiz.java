@@ -27,6 +27,17 @@ public class WinxQuiz implements IGame {
 	    parseFile(sc);
 	}
 
+    private void parseFile(Scanner sc) {
+        while (sc.hasNextLine())
+        {
+            String currentQuestion = sc.nextLine();
+            ArrayList<Answer> currentAnswers = new ArrayList<>();
+            for (int i = 0; i < answersCount; ++i)
+                currentAnswers.add(new Answer(sc.nextLine(), i));
+            quizSteps.add(new QuizItem(currentAnswers, currentQuestion));
+        }
+    }
+
 	private void getGameData(int userId) {
         GameDataSet userData = db.getGameData(userId);
         currentQuestionNumber = userData.currentQuestionId;
@@ -37,38 +48,6 @@ public class WinxQuiz implements IGame {
         for (int i = 0; i < userData.answersOrder.length; ++i)
             answersOrder.add(userData.answersOrder[i]);
     }
-	
-	private void parseFile(Scanner sc) {
-		while (sc.hasNextLine())
-	    {
-	    		String currentQuestion = sc.nextLine();
-	    		ArrayList<Answer> currentAnswers = new ArrayList<>();
-	    		for (int i = 0; i < answersCount; ++i)
-	    			currentAnswers.add(new Answer(sc.nextLine(), i));
-	    		quizSteps.add(new QuizItem(currentAnswers, currentQuestion));
-	    }
-	}
-	
-    @Override
-    public void markActive(int userId) {
-        db.markGameActive(userId);
-    }
-
-    @Override
-    public void markInactive(int userId) {
-        db.markGameInactive(userId);
-    }
-
-    @Override
-    public boolean isActive(int userId) {
-        return db.isGameActive(userId);
-    }
-
-    @Override
-	public String getInitialMessage(int userId) {
-        markActive(userId);
-		return "Привет! Сейчас мы узнаем, кто ты из фей Winx.";
-	}
 
 	private List<String> getAnswers(List<Integer> order)
 	{
@@ -112,5 +91,26 @@ public class WinxQuiz implements IGame {
 
 		db.setGameData(userId, new GameDataSet(userId, currentQuestionNumber, answerStatistic, answersOrder));
 		return new ChatBotReply(quizSteps.get(currentQuestionNumber - 1).question, getAnswers(answersOrder));
+	}
+
+	@Override
+	public void markActive(int userId) {
+		db.markGameActive(userId);
+	}
+
+	@Override
+	public void markInactive(int userId) {
+		db.markGameInactive(userId);
+	}
+
+	@Override
+	public boolean isActive(int userId) {
+		return db.isGameActive(userId);
+	}
+
+	@Override
+	public String getInitialMessage(int userId) {
+		markActive(userId);
+		return "Привет! Сейчас мы узнаем, кто ты из фей Winx.";
 	}
 }
