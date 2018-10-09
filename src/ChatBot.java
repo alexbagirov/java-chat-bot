@@ -14,7 +14,9 @@ class ChatBot {
                 if (!gameInstance.isActive()) {
                     gameInstance = gameFactory.create();
                     gameInstance.markActive();
-                    return new ChatBotReply(gameInstance.getInitialMessage(), null);
+                    ChatBotReply firstQuestion = gameInstance.proceedRequest("");
+                    return new ChatBotReply(gameInstance.getInitialMessage() +
+                            '\n' + firstQuestion.message, firstQuestion.keyboardOptions);
                 }
                 return new ChatBotReply("Игра уже идёт.", null);
             case "/stop":
