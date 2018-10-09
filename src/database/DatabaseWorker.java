@@ -111,12 +111,14 @@ public class DatabaseWorker {
         }
     }
 
-    public void createGameData(int userId) {
+    private void runSql (int userId, String query) {
         try {
             if (c.isClosed())
                 reconnect();
+
             Statement stmt = c.createStatement();
-            String sql = String.format("INSERT INTO quiz VALUES(%d, 0, '{0,0,0,0,0,0}', '{0,1,2,3,4,5}', TRUE)", userId);
+
+            String sql = String.format(query, userId);
             stmt.executeUpdate(sql);
             stmt.close();
         }
@@ -126,55 +128,20 @@ public class DatabaseWorker {
         }
     }
 
-    public void destroyGameData(int userId) {
-        try {
-            if (c.isClosed())
-                reconnect();
-
-            Statement stmt = c.createStatement();
-
-            String sql = String.format("DELETE FROM quiz WHERE id = %d", userId);
-            stmt.executeUpdate(sql);
-            stmt.close();
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
+    public void createGameData(int userId) {
+        runSql(userId, "INSERT INTO quiz VALUES(%d, 0, '{0,0,0,0,0,0}', '{0,1,2,3,4,5}', TRUE)");
     }
 
     public void markGameActive(int userId) {
-        try {
-            if (c.isClosed())
-                reconnect();
-
-            Statement stmt = c.createStatement();
-
-            String sql = String.format("UPDATE quiz SET game_active = TRUE WHERE id = %d", userId);
-            stmt.executeUpdate(sql);
-            stmt.close();
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
+        runSql(userId, "UPDATE quiz SET game_active = TRUE WHERE id = %d");
     }
 
     public void markGameInactive(int userId) {
-        try {
-            if (c.isClosed())
-                reconnect();
+        runSql(userId, "UPDATE quiz SET game_active = FALSE WHERE id = %d");
+    }
 
-            Statement stmt = c.createStatement();
-
-            String sql = String.format("UPDATE quiz SET game_active = FALSE WHERE id = %d", userId);
-            stmt.executeUpdate(sql);
-            stmt.close();
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
+    public void destroyGameData(int userId) {
+        runSql(userId, "DELETE FROM quiz WHERE id = %d");
     }
 
     public boolean isGameActive(int userId) {

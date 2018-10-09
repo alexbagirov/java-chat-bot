@@ -15,7 +15,7 @@ public class WinxQuiz implements IGame {
 
 	private DatabaseWorker db = new DatabaseWorker();
 
-    public WinxQuiz(String fileName) throws FileNotFoundException
+    WinxQuiz(String fileName) throws FileNotFoundException
 	{
 	    db.connect();
 	    db.initDatabase();

@@ -18,7 +18,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private final ReplyKeyboardRemove noKeyboard = new ReplyKeyboardRemove();
 
-    protected TelegramBot(DefaultBotOptions botOptions) {
+    TelegramBot(DefaultBotOptions botOptions) {
         super(botOptions);
         try {
             BOT_USERNAME = System.getenv("BOT_USERNAME");

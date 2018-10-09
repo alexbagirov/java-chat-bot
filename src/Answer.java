@@ -1,8 +1,8 @@
-public class Answer {
+class Answer {
 	String answer;
 	int characterIndex;
 
-	public Answer(String answer, int index) {
+	Answer(String answer, int index) {
 		characterIndex = index;
 		this.answer = answer;
 	}
