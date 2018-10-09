@@ -12,7 +12,7 @@ public class WinxQuiz implements IGame {
 	private int currentQuestionNumber;
 	private List<Integer> answerStatistic;
 	private final String[] characterOrder = new String[] {"Блум", "Стелла", "Муза", "Текна", "Флора", "Лейла"};
-	private List<Answer> previousAnswers = new ArrayList<>();
+	private List<Integer> answersOrder;
 
     public WinxQuiz(String fileName) throws FileNotFoundException
 	{
@@ -25,6 +25,11 @@ public class WinxQuiz implements IGame {
 		for (int i = 0; i < answersCount; i++)
 			answerStatistic.add(0);
 	    parseFile(sc);
+
+	    answersOrder = new ArrayList<>();
+	    for (int i = 0; i < answersCount; ++i) {
+	        answersOrder.add(i);
+        }
 	}
 	
 	private void parseFile(Scanner sc) {
@@ -59,15 +64,17 @@ public class WinxQuiz implements IGame {
 		return "Привет! Сейчас мы узнаем, кто ты из фей Winx.";
 	}
 
-	private List<String> getAnswers(List<Answer> answerItems)
+	private List<String> getAnswers(List<Integer> order)
 	{
-		List<String> answers = new ArrayList<>();
-		int symbol = 65;
-		for (Answer answer: answerItems) {
-			answers.add(String.format("%c. %s", (char) symbol, answer.answer));
+        List<Answer> questionAnswers = quizSteps.get(currentQuestionNumber - 1).answers;
+	    List<String> orderedAnswers = new ArrayList<>();
+
+	    int symbol = 65;
+		for (int index : order) {
+			orderedAnswers.add(String.format("%c. %s", (char) symbol, questionAnswers.get(index).answer));
 			symbol++;
 		}
-		return answers;
+		return orderedAnswers;
 	}
 	
 	@Override
@@ -80,14 +87,15 @@ public class WinxQuiz implements IGame {
 		}
 		if (currentQuestionNumber > 0) {
             final char firstAnswer = 'A';
-            int answerIndex = request.charAt(0) - firstAnswer;
-            answerStatistic.set(previousAnswers.get(answerIndex).characterIndex,
-                    answerStatistic.get(previousAnswers.get(answerIndex).characterIndex) + 1);
+            char firstLetter = request.charAt(0);
+            if (firstLetter < 'A' || firstLetter > 'F')
+                return new ChatBotReply("Подумай ещё раз!", getAnswers(answersOrder));
+            int answerIndex = answersOrder.get(request.charAt(0) - firstAnswer);
+            answerStatistic.set(answerIndex, answerStatistic.get(answerIndex) + 1);
         }
-		List<Answer> answers = new ArrayList<>(quizSteps.get(currentQuestionNumber).answers);
-		Collections.shuffle(answers);
-		currentQuestionNumber++;
-		previousAnswers = answers;
-		return new ChatBotReply(quizSteps.get(currentQuestionNumber - 1).question, getAnswers(answers));
+
+        currentQuestionNumber++;
+		Collections.shuffle(answersOrder);
+		return new ChatBotReply(quizSteps.get(currentQuestionNumber - 1).question, getAnswers(answersOrder));
 	}
 }

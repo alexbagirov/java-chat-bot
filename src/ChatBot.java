@@ -26,7 +26,10 @@ class ChatBot {
                 gameInstance.markInactive();
                 return new ChatBotReply("Игра закончена.", null);
             default:
-                return gameInstance.proceedRequest(message);
+                if (gameInstance.isActive())
+                    return gameInstance.proceedRequest(message);
+                else
+                    return new ChatBotReply("Игра ещё не началась.", null);
         }
     }
 }
