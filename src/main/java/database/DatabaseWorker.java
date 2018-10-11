@@ -8,11 +8,8 @@ public class DatabaseWorker {
 
     public void connect() {
         try {
-            Class.forName("org.postgresql.Driver");
-            c = DriverManager.getConnection(
-                    System.getenv("DB_URL"),
-                    System.getenv("DB_USER"),
-                    System.getenv("DB_PASS"));
+            String dbUrl = System.getenv("JDBC_DATABASE_URL");
+            c = DriverManager.getConnection(dbUrl);
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);

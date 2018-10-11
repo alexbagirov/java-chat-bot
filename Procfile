@@ -1,0 +1,1 @@
+worker: java -jar target/bot-1.0.jar -Djdbc.drivers=org.postgresql.Driver
