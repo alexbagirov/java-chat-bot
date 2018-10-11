@@ -79,9 +79,9 @@ public class WinxQuiz implements IGame {
 		if (gameData.currentQuestionId > answersCount)
 		{
 			markInactive(userId);
-			return new ChatBotReply(characterOrder[Ints.indexOf(
-			        gameData.answerStatistics,
-                    Ints.max(gameData.answerStatistics))], null);
+			return new ChatBotReply(String.format("Всё понятно. Ты %s",
+					characterOrder[Ints.indexOf(gameData.answerStatistics,
+                    Ints.max(gameData.answerStatistics))]), null);
 		}
 		if (gameData.currentQuestionId > 0) {
             final char firstAnswer = 'A';
